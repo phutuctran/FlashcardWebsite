@@ -22,6 +22,7 @@ namespace DBModels.Models
         public int? Level { get; set; }
         public byte[] IllustrationImg { get; set; }
         public string Author { get; set; }
+        public DateTime? DateCreate { get; set; }
 
         public virtual Accounts AuthorNavigation { get; set; }
         public virtual SpeechParts SpeechPartNavigation { get; set; }

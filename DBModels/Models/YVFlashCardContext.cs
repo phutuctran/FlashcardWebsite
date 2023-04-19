@@ -66,6 +66,10 @@ namespace DBModels.Models
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
+                entity.Property(e => e.DateCreate)
+                    .HasColumnType("smalldatetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Mean).IsUnicode(false);
 
                 entity.Property(e => e.SpeechPart)
@@ -271,7 +275,6 @@ namespace DBModels.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=YVFlashCard;Integrated Security=True;TrustServerCertificate=True;");

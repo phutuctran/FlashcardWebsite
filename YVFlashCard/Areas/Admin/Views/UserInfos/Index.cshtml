@@ -54,7 +54,7 @@
 									@{
 										if (ViewBag.Accounts != null)
 										{
-																	@foreach (var account in ViewBag.Accounts)
+											@foreach (var account in ViewBag.Accounts)
 											{
 																		<tr>
 																			<td class="cell">@account.Username</td>
@@ -69,95 +69,95 @@
 																					<div class="modal-dialog" role="document">
 
 																						@using (Html.BeginForm("update-password", "UserInfos", FormMethod.Post, new { onsubmit = "return validateModal();" }))
-																{
-																	Model.Username = account.Username;
-																	Model.DateCreate = account.DateCreate;
-																	Model.FirstName = account.FirstName;
-																	Model.LastName = account.LastName;
-																	Model.PhoneNumber = account.PhoneNumber;
-																	Model.Address = account.Address;
-																	Model.Email = account.Email;
-																	Model.Age = account.Age;
-																	Model.Sex = account.Sex;
-																	Model.Role = account.Role;
+																						{
+																							Model.Username = account.Username;
+																							Model.DateCreate = account.DateCreate;
+																							Model.FirstName = account.FirstName;
+																							Model.LastName = account.LastName;
+																							Model.PhoneNumber = account.PhoneNumber;
+																							Model.Address = account.Address;
+																							Model.Email = account.Email;
+																							Model.Age = account.Age;
+																							Model.Sex = account.Sex;
+																							Model.Role = account.Role;
 
-																							<div class="modal-content">
+																													<div class="modal-content">
 
-																								<div class="modal-header">
-																									<h5 class="modal-title" id="exampleModalLabel">Change information: @account.Username</h5>
-																								</div>
-																								<div class="modal-body">
-																									@Html.TextBox("Username", null, new {@type = "hidden"});
-																									@Html.TextBox("Sex", null, new {@type = "hidden"});
-																									<div class="mb-3">
-																										<label class="form-label">First Name</label>
-																										@Html.TextBoxFor(model=>model.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
+																														<div class="modal-header">
+																															<h5 class="modal-title" id="exampleModalLabel">Change information: @account.Username</h5>
+																														</div>
+																														<div class="modal-body">
+																															@Html.TextBox("Username", null, new {@type = "hidden"});
+																															@Html.TextBox("Sex", null, new {@type = "hidden"});
+																															<div class="mb-3">
+																																<label class="form-label">First Name</label>
+																																@Html.TextBoxFor(model=>model.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
 																										
-																									</div>
-																									<div class="mb-3">
-																										<label class="form-label">Last Name</label>
-																										@Html.TextBoxFor(model=>model.LastName, new {@class = "form-control", @tye="text",  @placeholder = "LastName", @name="LastName"})
-																									</div>
-																									<div class="row">
-																										<div class="col">
-																											<div class="mb-3">
-																												<label class="form-label">Phone Number</label>
-																												@Html.TextBoxFor(model=>model.PhoneNumber, new {@Id = "phoneNumber", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
+																															</div>
+																															<div class="mb-3">
+																																<label class="form-label">Last Name</label>
+																																@Html.TextBoxFor(model=>model.LastName, new {@class = "form-control", @tye="text",  @placeholder = "LastName", @name="LastName"})
+																															</div>
+																															<div class="row">
+																																<div class="col">
+																																	<div class="mb-3">
+																																		<label class="form-label">Phone Number</label>
+																																		@Html.TextBoxFor(model=>model.PhoneNumber, new {@Id = "phoneNumber", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
 
-																											</div>
-																										</div>
-																										<div class="col">
-																											<div class="mby-3">
-																												<label class="form-label">Email</label>
-																												@Html.TextBoxFor(model=>model.Email, new {@Id="email", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
-																											</div>
-																										</div>
-																									</div>
+																																	</div>
+																																</div>
+																																<div class="col">
+																																	<div class="mby-3">
+																																		<label class="form-label">Email</label>
+																																		@Html.TextBoxFor(model=>model.Email, new {@Id="email", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
+																																	</div>
+																																</div>
+																															</div>
 
-																									<div class="mb-3">
-																										<label class="form-label">Address</label>
-																										@Html.TextBoxFor(model=>model.Address, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
-																									</div>
-																									<div class="row">
-																										<div class="col">
-																											<div class="mb-3">
-																												<label class="form-label">Age</label>
-																												@Html.TextBoxFor(model=>model.Age, new {@Id="age", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
-																											</div>
-																										</div>
-																										<div class="col">
-																											<div class="mb-3">
-																												<label class="form-label">Sex</label>
-																												<select class="form-select" aria-label=".form-select-sm example" id="sexSelect">
-																													<option value="Male">Male</option>
-																													<option value="Female">Female</option>
-																												</select>
-																												<script>
-																													var selectElement = document.getElementById("sexSelect");
-																													selectElement.value = @Model.Sex;
-																													selectElement.addEventListener("change", function () {
-																														var selectedValue = selectElement.value;
-																														@Model.Sex = selectedValue;
-																												});
-																												</script>	
-																											</div>	
-																										</div>
-																									</div>
-																									<div class="mb-3">
-																										<label for="exampleInputPassword" class="form-label">Password</label>
-																										@Html.TextBoxFor(model=>model.NewPassword, new {@class = "form-control", @type="password", @placeholder = "New Password", @name="NewPassword", @id="password"})
-																									</div>
+																															<div class="mb-3">
+																																<label class="form-label">Address</label>
+																																@Html.TextBoxFor(model=>model.Address, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
+																															</div>
+																															<div class="row">
+																																<div class="col">
+																																	<div class="mb-3">
+																																		<label class="form-label">Age</label>
+																																		@Html.TextBoxFor(model=>model.Age, new {@Id="age", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
+																																	</div>
+																																</div>
+																																<div class="col">
+																																	<div class="mb-3">
+																																		<label class="form-label">Sex</label>
+																																		<select class="form-select" aria-label=".form-select-sm example" id="sexSelect">
+																																			<option value="Male">Male</option>
+																																			<option value="Female">Female</option>
+																																		</select>
+																																		<script>
+																																			var selectElement = document.getElementById("sexSelect");
+																																			selectElement.value = @Model.Sex;
+																																			selectElement.addEventListener("change", function () {
+																																				var selectedValue = selectElement.value;
+																																				@Model.Sex = selectedValue;
+																																		});
+																																		</script>	
+																																	</div>	
+																																</div>
+																															</div>
+																															<div class="mb-3">
+																																<label for="exampleInputPassword" class="form-label">Password</label>
+																																@Html.TextBoxFor(model=>model.NewPassword, new {@class = "form-control", @type="password", @placeholder = "New Password", @name="NewPassword", @id="password"})
+																															</div>
 
-																									<div class="mb-3" id="divRepassword">
-																										<label for="exampleInputPassword" class="form-label" id="labelRepassword">Confirm Password</label>
-																										<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repassword">
-																									</div>
-																								</div>
-																								<div class="modal-footer">
-																									<button type="submit" class="btn btn-primary">Save changes</button>
-																								</div>
-																							</div>
-																}
+																															<div class="mb-3" id="divRepassword">
+																																<label for="exampleInputPassword" class="form-label" id="labelRepassword">Confirm Password</label>
+																																<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repassword">
+																															</div>
+																														</div>
+																														<div class="modal-footer">
+																															<button type="submit" class="btn btn-primary">Save changes</button>
+																														</div>
+																													</div>
+																						}
 																					</div>
 																				</div>
 																			</td>
