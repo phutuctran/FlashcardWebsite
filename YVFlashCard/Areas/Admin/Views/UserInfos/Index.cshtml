@@ -1,0 +1,182 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@model YVFlashCard.Areas.Admin.Models.UserInfoModel
+<div class="app-content pt-3 p-md-3 p-lg-4">
+	<div class="container-xl">
+
+		<div class="row g-3 mb-4 align-items-center justify-content-between">
+			<div class="col-auto">
+				<h1 class="app-page-title mb-0">User Informations</h1>
+			</div>
+			<div class="col-auto">
+				<div class="page-utilities">
+					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+						<div class="col-auto">
+							<form class="table-search-form row gx-1 align-items-center">
+								<div class="col-auto">
+									<input type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Search">
+								</div>
+								<div class="col-auto">
+									<button type="submit" class="btn app-btn-secondary">Search</button>
+								</div>
+							</form>
+
+						</div>
+					</div><!--//row-->
+				</div><!--//table-utilities-->
+			</div><!--//col-auto-->
+		</div><!--//row-->
+
+
+
+
+
+		<div class="tab-content" id="orders-table-tab-content">
+			<div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+				<div class="app-card app-card-orders-table shadow-sm mb-5">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Username</th>
+										<th class="cell">Role</th>
+										<th class="cell">First Name</th>
+										<th class="cell">Last Name</th>
+										<th class="cell">Phone Number</th>
+										<th class="cell">Email</th>
+										<th class="cell"></th>
+									</tr>
+								</thead>
+								<tbody>
+									@{
+										if (ViewBag.Accounts != null)
+										{
+																	@foreach (var account in ViewBag.Accounts)
+											{
+																		<tr>
+																			<td class="cell">@account.Username</td>
+																			<td class="cell">@account.Role</td>
+																			<td class="cell"><span class="truncate">@account.FirstName</span></td>
+																			<td class="cell"><span class="truncate">@account.LastName</span></td>
+																			<td class="cell">@account.PhoneNumber</td>
+																			<td class="cell">@account.Email</td>
+																			<td>
+																				<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#changePasswordModal-@account.Username">Change</button>
+																				<div class="modal fade" id="changePasswordModal-@account.Username" tabindex="-1" role="dialog" aria-labelledby="changePasswordModal-@account.Username" aria-hidden="true">
+																					<div class="modal-dialog" role="document">
+
+																						@using (Html.BeginForm("update-password", "UserInfos", FormMethod.Post, new { onsubmit = "return validateModal();" }))
+																{
+																	Model.Username = account.Username;
+																	Model.DateCreate = account.DateCreate;
+																	Model.FirstName = account.FirstName;
+																	Model.LastName = account.LastName;
+																	Model.PhoneNumber = account.PhoneNumber;
+																	Model.Address = account.Address;
+																	Model.Email = account.Email;
+																	Model.Age = account.Age;
+																	Model.Sex = account.Sex;
+																	Model.Role = account.Role;
+
+																							<div class="modal-content">
+
+																								<div class="modal-header">
+																									<h5 class="modal-title" id="exampleModalLabel">Change information: @account.Username</h5>
+																								</div>
+																								<div class="modal-body">
+																									@Html.TextBox("Username", null, new {@type = "hidden"});
+																									@Html.TextBox("Sex", null, new {@type = "hidden"});
+																									<div class="mb-3">
+																										<label class="form-label">First Name</label>
+																										@Html.TextBoxFor(model=>model.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
+																										
+																									</div>
+																									<div class="mb-3">
+																										<label class="form-label">Last Name</label>
+																										@Html.TextBoxFor(model=>model.LastName, new {@class = "form-control", @tye="text",  @placeholder = "LastName", @name="LastName"})
+																									</div>
+																									<div class="row">
+																										<div class="col">
+																											<div class="mb-3">
+																												<label class="form-label">Phone Number</label>
+																												@Html.TextBoxFor(model=>model.PhoneNumber, new {@Id = "phoneNumber", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
+
+																											</div>
+																										</div>
+																										<div class="col">
+																											<div class="mby-3">
+																												<label class="form-label">Email</label>
+																												@Html.TextBoxFor(model=>model.Email, new {@Id="email", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
+																											</div>
+																										</div>
+																									</div>
+
+																									<div class="mb-3">
+																										<label class="form-label">Address</label>
+																										@Html.TextBoxFor(model=>model.Address, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
+																									</div>
+																									<div class="row">
+																										<div class="col">
+																											<div class="mb-3">
+																												<label class="form-label">Age</label>
+																												@Html.TextBoxFor(model=>model.Age, new {@Id="age", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
+																											</div>
+																										</div>
+																										<div class="col">
+																											<div class="mb-3">
+																												<label class="form-label">Sex</label>
+																												<select class="form-select" aria-label=".form-select-sm example" id="sexSelect">
+																													<option value="Male">Male</option>
+																													<option value="Female">Female</option>
+																												</select>
+																												<script>
+																													var selectElement = document.getElementById("sexSelect");
+																													selectElement.value = @Model.Sex;
+																													selectElement.addEventListener("change", function () {
+																														var selectedValue = selectElement.value;
+																														@Model.Sex = selectedValue;
+																												});
+																												</script>	
+																											</div>	
+																										</div>
+																									</div>
+																									<div class="mb-3">
+																										<label for="exampleInputPassword" class="form-label">Password</label>
+																										@Html.TextBoxFor(model=>model.NewPassword, new {@class = "form-control", @type="password", @placeholder = "New Password", @name="NewPassword", @id="password"})
+																									</div>
+
+																									<div class="mb-3" id="divRepassword">
+																										<label for="exampleInputPassword" class="form-label" id="labelRepassword">Confirm Password</label>
+																										<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repassword">
+																									</div>
+																								</div>
+																								<div class="modal-footer">
+																									<button type="submit" class="btn btn-primary">Save changes</button>
+																								</div>
+																							</div>
+																}
+																					</div>
+																				</div>
+																			</td>
+																		</tr>
+											}
+										}
+									}
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+
+					</div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+			</div><!--//tab-pane-->
+		</div><!--//tab-content-->
+		
+		<script src="/AdminAssets/js/app.js"></script>
+
+
+	</div><!--//container-fluid-->
+</div><!--//app-content-->

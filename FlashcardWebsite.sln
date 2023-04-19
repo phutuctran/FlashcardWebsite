@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YVFlashCard", "YVFlashCard\YVFlashCard.csproj", "{ADCD9915-3207-40DC-9BCB-DFB30DE0DEFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YVFlashCard", "YVFlashCard\YVFlashCard.csproj", "{ADCD9915-3207-40DC-9BCB-DFB30DE0DEFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBModels", "DBModels\DBModels.csproj", "{EA68864B-704A-4F21-A3DF-D9EF7BD3F2EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YVFlashCard.Test", "YVFlashCard.Test\YVFlashCard.Test.csproj", "{4737329E-0FFE-435E-BA22-B2C0C87F42D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YVFlashCard.Service", "YVFlashCard.Service\YVFlashCard.Service.csproj", "{2BAEA0CA-099F-4E70-9BE9-F5D131594150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{ADCD9915-3207-40DC-9BCB-DFB30DE0DEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCD9915-3207-40DC-9BCB-DFB30DE0DEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCD9915-3207-40DC-9BCB-DFB30DE0DEFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA68864B-704A-4F21-A3DF-D9EF7BD3F2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA68864B-704A-4F21-A3DF-D9EF7BD3F2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA68864B-704A-4F21-A3DF-D9EF7BD3F2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA68864B-704A-4F21-A3DF-D9EF7BD3F2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4737329E-0FFE-435E-BA22-B2C0C87F42D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4737329E-0FFE-435E-BA22-B2C0C87F42D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4737329E-0FFE-435E-BA22-B2C0C87F42D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4737329E-0FFE-435E-BA22-B2C0C87F42D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BAEA0CA-099F-4E70-9BE9-F5D131594150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BAEA0CA-099F-4E70-9BE9-F5D131594150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BAEA0CA-099F-4E70-9BE9-F5D131594150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BAEA0CA-099F-4E70-9BE9-F5D131594150}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
