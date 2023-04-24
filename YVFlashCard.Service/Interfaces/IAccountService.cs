@@ -12,8 +12,14 @@ namespace YVFlashCard.Service.Interfaces
     {
         Task<Accounts?> AuthenticateAsync(string username, string password);
         Task<List<UserDTO>> GetAllAccountsAsync();
+        Task<List<UserDTO>> GetAccountsByTopAsync(int count);
+        Task<List<UserDTO>> GetAccountsByKeyAsync(string keySreach, int count);
+        Task<List<UserDTO>> GetAccountsAsync(string keySearch, int count);
         Task<Accounts> GetAccountByUsernameAsync(string username);
+        Task<bool> CheckAccountExistsAsync(string username);
         Task UpdatePassword(UpdateInfoRequest request);
         Task UpdateInfo(UpdateInfoRequest request);
     }
+
+
 }

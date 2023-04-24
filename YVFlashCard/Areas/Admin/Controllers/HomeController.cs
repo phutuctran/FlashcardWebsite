@@ -8,6 +8,7 @@ using System.Security.Claims;
 using YVFlashCard.Areas.Admin.Middleware;
 using YVFlashCard.Service.Users.DTO;
 using YVFlashCard.Service;
+using YVFlashCard.Service.VisitCounter;
 
 namespace YVFlashCard.Areas.Admin.Controllers
 {

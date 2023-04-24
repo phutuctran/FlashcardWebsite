@@ -7,9 +7,9 @@ namespace DBModels.Models
 {
     public partial class ForgetWords
     {
-        public string ForgetWordId { get; set; }
-        public string StudyId { get; set; }
-        public string WordId { get; set; }
+        public int ForgetWordId { get; set; }
+        public int? StudyId { get; set; }
+        public int? WordId { get; set; }
         public int? ForgetCount { get; set; }
 
         public virtual Studies Study { get; set; }

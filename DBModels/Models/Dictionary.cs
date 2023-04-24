@@ -14,11 +14,11 @@ namespace DBModels.Models
             SynonymsWordId2Navigation = new HashSet<Synonyms>();
         }
 
-        public string WordId { get; set; }
+        public int WordId { get; set; }
         public string WordText { get; set; }
         public string Mean { get; set; }
         public string SpeechPart { get; set; }
-        public string Theme { get; set; }
+        public int? ThemeId { get; set; }
         public int? Level { get; set; }
         public byte[] IllustrationImg { get; set; }
         public string Author { get; set; }
@@ -26,7 +26,7 @@ namespace DBModels.Models
 
         public virtual Accounts AuthorNavigation { get; set; }
         public virtual SpeechParts SpeechPartNavigation { get; set; }
-        public virtual Themes Word { get; set; }
+        public virtual Themes Theme { get; set; }
         public virtual ICollection<ForgetWords> ForgetWords { get; set; }
         public virtual ICollection<Synonyms> SynonymsWordId1Navigation { get; set; }
         public virtual ICollection<Synonyms> SynonymsWordId2Navigation { get; set; }

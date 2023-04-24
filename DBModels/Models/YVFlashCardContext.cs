@@ -33,13 +33,15 @@ namespace DBModels.Models
             modelBuilder.Entity<Accounts>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__Accounts__C9F28457A6561B56");
+                    .HasName("PK__Accounts__C9F284575CDF9DD5");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+                entity.Property(e => e.DateCreate)
+                    .HasColumnType("smalldatetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.PassWord)
                     .HasMaxLength(20)
@@ -54,13 +56,9 @@ namespace DBModels.Models
             modelBuilder.Entity<Dictionary>(entity =>
             {
                 entity.HasKey(e => e.WordId)
-                    .HasName("PK__Dictiona__2C20F046BFA157A4");
+                    .HasName("PK__Dictiona__2C20F04629886DC0");
 
-                entity.Property(e => e.WordId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("WordID")
-                    .IsFixedLength();
+                entity.Property(e => e.WordId).HasColumnName("WordID");
 
                 entity.Property(e => e.Author)
                     .HasMaxLength(36)
@@ -76,9 +74,7 @@ namespace DBModels.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Theme)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
+                entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
 
                 entity.Property(e => e.WordText).IsUnicode(false);
 
@@ -92,35 +88,22 @@ namespace DBModels.Models
                     .HasForeignKey(d => d.SpeechPart)
                     .HasConstraintName("FK_Dic_SpeechParts");
 
-                entity.HasOne(d => d.Word)
-                    .WithOne(p => p.Dictionary)
-                    .HasForeignKey<Dictionary>(d => d.WordId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.Dictionary)
+                    .HasForeignKey(d => d.ThemeId)
                     .HasConstraintName("FK_Dic_Themes");
             });
 
             modelBuilder.Entity<ForgetWords>(entity =>
             {
                 entity.HasKey(e => e.ForgetWordId)
-                    .HasName("PK__ForgetWo__489DD9A298619858");
+                    .HasName("PK__ForgetWo__489DD9A270C627F1");
 
-                entity.Property(e => e.ForgetWordId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("ForgetWordID")
-                    .IsFixedLength();
+                entity.Property(e => e.ForgetWordId).HasColumnName("ForgetWordID");
 
-                entity.Property(e => e.StudyId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("StudyID")
-                    .IsFixedLength();
+                entity.Property(e => e.StudyId).HasColumnName("StudyID");
 
-                entity.Property(e => e.WordId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("WordID")
-                    .IsFixedLength();
+                entity.Property(e => e.WordId).HasColumnName("WordID");
 
                 entity.HasOne(d => d.Study)
                     .WithMany(p => p.ForgetWords)
@@ -136,7 +119,7 @@ namespace DBModels.Models
             modelBuilder.Entity<Setting>(entity =>
             {
                 entity.HasKey(e => e.Name)
-                    .HasName("PK__Setting__737584F7769F2641");
+                    .HasName("PK__Setting__737584F797081D4E");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(32)
@@ -150,7 +133,7 @@ namespace DBModels.Models
             modelBuilder.Entity<SpeechParts>(entity =>
             {
                 entity.HasKey(e => e.SpeechPartName)
-                    .HasName("PK__SpeechPa__B4865E601B34FE76");
+                    .HasName("PK__SpeechPa__B4865E60C76100B9");
 
                 entity.Property(e => e.SpeechPartName)
                     .HasMaxLength(20)
@@ -162,13 +145,9 @@ namespace DBModels.Models
             modelBuilder.Entity<Studies>(entity =>
             {
                 entity.HasKey(e => e.StudyId)
-                    .HasName("PK__Studies__1B4BFBF8950C4709");
+                    .HasName("PK__Studies__1B4BFBF8E8D6242B");
 
-                entity.Property(e => e.StudyId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("StudyID")
-                    .IsFixedLength();
+                entity.Property(e => e.StudyId).HasColumnName("StudyID");
 
                 entity.Property(e => e.ThemeId)
                     .HasMaxLength(36)
@@ -189,25 +168,13 @@ namespace DBModels.Models
             modelBuilder.Entity<Synonyms>(entity =>
             {
                 entity.HasKey(e => e.SynonymId)
-                    .HasName("PK__Synonyms__066F63A3252FBE3C");
+                    .HasName("PK__Synonyms__066F63A3B22738C4");
 
-                entity.Property(e => e.SynonymId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("SynonymID")
-                    .IsFixedLength();
+                entity.Property(e => e.SynonymId).HasColumnName("SynonymID");
 
-                entity.Property(e => e.WordId1)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("WordID1")
-                    .IsFixedLength();
+                entity.Property(e => e.WordId1).HasColumnName("WordID1");
 
-                entity.Property(e => e.WordId2)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("WordID2")
-                    .IsFixedLength();
+                entity.Property(e => e.WordId2).HasColumnName("WordID2");
 
                 entity.HasOne(d => d.WordId1Navigation)
                     .WithMany(p => p.SynonymsWordId1Navigation)
@@ -223,13 +190,9 @@ namespace DBModels.Models
             modelBuilder.Entity<Themes>(entity =>
             {
                 entity.HasKey(e => e.ThemeId)
-                    .HasName("PK__Themes__FBB3E4B981950AA8");
+                    .HasName("PK__Themes__FBB3E4B909E33BEA");
 
-                entity.Property(e => e.ThemeId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("ThemeID")
-                    .IsFixedLength();
+                entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
 
                 entity.Property(e => e.Author)
                     .HasMaxLength(36)
@@ -248,7 +211,7 @@ namespace DBModels.Models
             modelBuilder.Entity<UserInfos>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__UserInfo__C9F284575EEA00A6");
+                    .HasName("PK__UserInfo__C9F28457A11D3F29");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(36)

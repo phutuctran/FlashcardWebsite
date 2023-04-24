@@ -1,7 +1,6 @@
 ﻿using DBModels.Models;
 using Google;
 using System;
-using DBModels.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,13 @@ using YVFlashCard.Service.Interfaces;
 using static Grpc.Core.Metadata;
 using YVFlashCard.Service.Types;
 
-namespace YVFlashCard.Service
+namespace YVFlashCard.Service.VisitCounter
 {
     public class VisitCounterRepositoryService : IVisitCounterRepositoryService
     {
         private readonly YVFlashCardContext _context;
 
-        public  VisitCounterRepositoryService()
+        public VisitCounterRepositoryService()
         {
             _context = new YVFlashCardContext();
         }
@@ -36,7 +35,7 @@ namespace YVFlashCard.Service
         public async Task<int> IncrementVisitCountAsync(int count)
         {
             var visitCount = await _context.Setting.FirstOrDefaultAsync(u => u.Name == SettingTypes.USER_VISIT_COUNTER);
-            
+
             if (visitCount == null)
             {
                 return 0;

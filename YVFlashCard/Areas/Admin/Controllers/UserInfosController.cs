@@ -1,5 +1,7 @@
 ﻿using DBModels.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using YVFlashCard.App_Start;
 using YVFlashCard.Areas.Admin.Middleware;
 using YVFlashCard.Areas.Admin.Models;
 using YVFlashCard.Service.Interfaces;
@@ -23,22 +25,32 @@ namespace YVFlashCard.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string keySearch = "", int page = 1)
         {
-            List<UserDTO> accounts = await this.accountService.GetAllAccountsAsync();
-            ViewBag.Accounts = accounts;
-            UserInfoModel UserInfoUpdateModel = new UserInfoModel();
-            return View(UserInfoUpdateModel);
+            List<UserDTO> users;
+            users = await this.accountService.GetAccountsAsync(keySearch, page * DefaultValue.PageSize);
+            
+            List<UserInfoModel> userInfoModels = new List<UserInfoModel>();
+            users.ForEach(i => userInfoModels.Add(new UserInfoModel(i)));
+            ViewBag.CurrentAccountPage = page;
+            ViewBag.KeySearch = keySearch;
+            return View(userInfoModels);
         }
 
         [HttpPost]
         [ActionName("update-Password")]
         public async Task<IActionResult> UpdateInfo(UserInfoModel model)
         {
-            //Console.WriteLine(model);
             await this.accountService.UpdatePassword(model.GetUpdateInfoRequest());
             await this.accountService.UpdateInfo(model.GetUpdateInfoRequest());
-            return Redirect("/admin/UserInfos");
+            return Redirect($"/admin/UserInfos?page={Request.Form["currentPage"]}&keySearch={Request.Form["KeySearch"]}");
         }
+
+        [HttpPost]
+        public async Task<JsonResult> CheckUsernameExist(string userName)
+        {
+            return Json(await this.accountService.CheckAccountExistsAsync(userName));
+        }
+
     }
 }

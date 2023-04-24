@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using YVFlashCard.Service.Adapter;
 using YVFlashCard.Service.Interfaces;
 using YVFlashCard.Service.Users.DTO;
 
@@ -29,20 +31,47 @@ namespace YVFlashCard.Service.Users
             using var dbs = new YVFlashCardContext();
             return await dbs.Accounts.FirstOrDefaultAsync(u => u.UserName == username);
         }
+        public async Task<List<UserDTO>> GetAccountsByKeyAsync(string keySreach, int count = 0)
+        {
+            using var dbs = new YVFlashCardContext();
+            var listUsers = await dbs.Accounts.Where(u => u.UserName.Contains(keySreach) || u.UserInfos.FirstName.Contains(keySreach) || u.UserInfos.LastName.Contains(keySreach)).Take(count).ToListAsync();
 
+            return await (new UserDTOAdapterIpml(listUsers)).GetUserDTOsAsync();
+        }
+        public async Task<List<UserDTO>> GetAccountsAsync(string keySearch = "", int count = 0)
+        {
+            if (string.IsNullOrEmpty(keySearch))
+            {
+                if (count == 0)
+                {
+                    return await GetAllAccountsAsync();
+                }
+                else
+                {
+                    return await GetAccountsByTopAsync(count);
+                }
+            }
+            else
+            {
+                return await GetAccountsByKeyAsync(keySearch, count);
+            }
+        }
         public async Task<List<UserDTO>> GetAllAccountsAsync()
         {
             using var dbs = new YVFlashCardContext();
-            var listUsers = await dbs.Accounts.ToListAsync();
-            List<UserDTO> result = new List<UserDTO>();
-            
-            foreach (var user in listUsers)
-            {
-                var info = await dbs.UserInfos.FirstAsync(u => u.UserName == user.UserName);
-                result.Add(new UserDTO(user, info));
-            }
+            var listUsers = await dbs.Accounts.OrderBy(u => u.UserName).ToListAsync();
 
-            return result;
+            //result.Sort((x, y) => DateTime.Compare(y.DateCreate, x.DateCreate));
+
+            return await (new UserDTOAdapterIpml(listUsers)).GetUserDTOsAsync();
+        }
+
+        public async Task<List<UserDTO>> GetAccountsByTopAsync(int count)
+        {
+            using var dbs = new YVFlashCardContext();
+            var listUsers = await dbs.Accounts.OrderBy(u => u.UserName).Take(count).ToListAsync();
+
+            return await (new UserDTOAdapterIpml(listUsers)).GetUserDTOsAsync(); ;
         }
 
         public async Task UpdateInfo(UpdateInfoRequest request)
@@ -77,6 +106,12 @@ namespace YVFlashCard.Service.Users
                 account.PassWord = request.NewPassword;
                 await dbs.SaveChangesAsync();
             }  
+        }
+
+        public async Task<bool> CheckAccountExistsAsync(string username)
+        {
+            using var dbs = new YVFlashCardContext();
+            return await dbs.Accounts.AnyAsync(u => u.UserName == username);
         }
     }
 }

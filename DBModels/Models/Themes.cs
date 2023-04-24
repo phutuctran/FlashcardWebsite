@@ -7,13 +7,18 @@ namespace DBModels.Models
 {
     public partial class Themes
     {
-        public string ThemeId { get; set; }
+        public Themes()
+        {
+            Dictionary = new HashSet<Dictionary>();
+        }
+
+        public int ThemeId { get; set; }
         public string ThemeName { get; set; }
         public string Mean { get; set; }
         public byte[] IllustrationImg { get; set; }
         public string Author { get; set; }
 
         public virtual Accounts AuthorNavigation { get; set; }
-        public virtual Dictionary Dictionary { get; set; }
+        public virtual ICollection<Dictionary> Dictionary { get; set; }
     }
 }

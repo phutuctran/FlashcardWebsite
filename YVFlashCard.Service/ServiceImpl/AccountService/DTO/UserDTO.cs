@@ -15,7 +15,7 @@ namespace YVFlashCard.Service.Users.DTO
 	public class UserDTO
 	{
 		public string Username { get; set; }
-		public DateTime? DateCreate { get; set; }
+		public DateTime DateCreate { get; set; }
 
 		public string FirstName {get; set;}
 		public string LastName {get; set;}
@@ -52,7 +52,7 @@ namespace YVFlashCard.Service.Users.DTO
 		public UserDTO(Accounts acc, UserInfos userInfo)
 		{
 			this.Username = acc.UserName;
-			this.DateCreate = acc.CreateDate;
+			this.DateCreate = (DateTime)(acc.DateCreate == null ? DateTime.Now : acc.DateCreate);
 			this.FirstName = userInfo.FirstName;
 			this.LastName = userInfo.LastName;
 			this.PhoneNumber = userInfo.PhoneNumber;

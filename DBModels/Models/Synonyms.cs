@@ -7,9 +7,9 @@ namespace DBModels.Models
 {
     public partial class Synonyms
     {
-        public string SynonymId { get; set; }
-        public string WordId1 { get; set; }
-        public string WordId2 { get; set; }
+        public int SynonymId { get; set; }
+        public int? WordId1 { get; set; }
+        public int? WordId2 { get; set; }
 
         public virtual Dictionary WordId1Navigation { get; set; }
         public virtual Dictionary WordId2Navigation { get; set; }

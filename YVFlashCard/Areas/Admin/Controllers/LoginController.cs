@@ -8,6 +8,7 @@ using YVFlashCard.Helpers;
 using YVFlashCard.Service.Interfaces;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using YVFlashCard.Service;
+using YVFlashCard.Service.VisitCounter;
 
 namespace YVFlashCard.Areas.Admin.Controllers
 {
@@ -84,7 +85,7 @@ namespace YVFlashCard.Areas.Admin.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
-                visitCountService.IncrementVisitCountAsync();
+                await visitCountService.IncrementVisitCountAsync();
                 this._logger.LogInformation("login ok " + account.UserName);
                 ViewBag.LoginSuccess = true;
                 ViewBag.Account = account;

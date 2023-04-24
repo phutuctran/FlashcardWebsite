@@ -12,7 +12,7 @@ namespace DBModels.Models
             ForgetWords = new HashSet<ForgetWords>();
         }
 
-        public string StudyId { get; set; }
+        public int StudyId { get; set; }
         public string UserName { get; set; }
         public string ThemeId { get; set; }
         public int? CurrentLevel { get; set; }
