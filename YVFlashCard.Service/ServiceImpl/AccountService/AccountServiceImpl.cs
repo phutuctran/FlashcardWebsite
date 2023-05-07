@@ -1,4 +1,5 @@
 ﻿using DBModels.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,7 @@ namespace YVFlashCard.Service.Users
             user.Address = request.Address;
             user.Age = request.Age;
             user.Sex = request.Sex;
+            user.AvatarData = request.Avatar;
             await dbs.SaveChangesAsync();
         }
 
@@ -112,6 +114,26 @@ namespace YVFlashCard.Service.Users
         {
             using var dbs = new YVFlashCardContext();
             return await dbs.Accounts.AnyAsync(u => u.UserName == username);
+        }
+
+        public async Task<bool> CreateNewUser(UpdateInfoRequest request)
+        {
+			
+			using (var context = new YVFlashCardContext())
+			{
+				var sql = "INSERT INTO Accounts (UserName, PassWord, DateCreate, Role) VALUES (@Col1, @Col2, @Col3, @Col4);";
+        
+				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@Col1", request.Username), new SqlParameter("@Col2", request.NewPassword), new SqlParameter("@Col3", DateTime.Now), new SqlParameter("@Col4", request.Role));
+				Console.WriteLine(row.ToString());
+				if (row > 0)
+				{
+					await UpdateInfo(request);
+					return true;
+				}
+                throw new Exception("Không thể thêm User mới!!!");
+
+			}
+			throw new Exception("lỗi khi thêm User mới!!!");
         }
     }
 }

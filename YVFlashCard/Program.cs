@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.OpenApi.Models;
 using YVFlashCard.Areas.Admin.Middleware;
 using YVFlashCard.Service.Interfaces;
+using YVFlashCard.Service.ServiceImpl.ThemeService;
 using YVFlashCard.Service.Users;
 
 namespace YVFlashCard
@@ -63,8 +64,9 @@ namespace YVFlashCard
         private static void AddReference(IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountServiceImpl>();
+			services.AddScoped<IThemeService, ThemeServiceImpl>();
 
-            services.AddSwaggerGen(c =>
+			services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "MVCCallWebAPI", Version = "v2" });
             });

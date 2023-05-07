@@ -1,34 +1,68 @@
-﻿
-/*=================Check validInfo when Create new user=================*/
-function validateModalWhenCreate() {
-	//alert("here");
-	if (!checkExistsUsername())
+﻿/*====================Create new user when valid data===========*/
+async function CreatNewUserAsync(event) {
+	event.preventDefault(); // Ngăn chặn form submit mặc định
+	let check = await validateModalWhenCreateAsync(event);
+	if (check) {
+		const form = event.target;
+		const formData = new FormData(form);
+		//event.target.submit();
+		const response = await fetch(form.action, {
+			method: form.method,
+			body: formData
+		});
+		if (response.ok) {
+			alert("Đã tạo User mới!");
+			location.reload();
+			return true;
+		}
+		else {
+			alert("Lỗi khi tạo User!");
+		}
 		return false;
+	}
+}
+
+
+/*=================Check validInfo when Create new user=================*/
+async function validateModalWhenCreateAsync(event) {
+	
+    
+	//alert(formData);
+	let isExists = await checkExistsUsername();
+	if (isExists)
+		return false;
+
 	if (!validatePassword(true))
 		return false;
+
 	var inputPhoneNumber = String(document.getElementById("phoneNumberNew").value);
 	if (ValidatePhoneNumber(inputPhoneNumber) === false && inputPhoneNumber) {
 		alert("Wrong phone number!!!");
 		return false;
 	}
+	
 	var inputEmail = String(document.getElementById("emailNew").value);
 	if (ValidateEmail(inputEmail) === false && inputEmail) {
 		alert("Wrong Email!!!");
 		return false;
 	}
+
 	var inputAge = String(document.getElementById("ageNew").value);
 	if (ValidateAge(inputAge) === false && inputAge) {
 		alert("Wrong Age!!!");
 		return false;
 	}
+	
 	var inputSex = String(document.getElementById("sexSelectNew").value);
 	if (ValidateSex(inputSex) === false && inputSex) {
 		alert("Wrong Sex!!!")
 		return false;
 	}
+	
 	return true;
 
 }
+
 
 
 
@@ -103,70 +137,52 @@ function validatePassword(require) {
 		password = document.getElementById("password").value;
 		confirmPassword = document.getElementById("repassword").value;
 	}
-
 	
 	if (require == true) {
-		if (password == null || confirmPassword == null) {
-			alert("Require password!!");
+		if (password == "" || confirmPassword == "") {
+			alert("Wrong password!!");
 			return false;
 		}
-		if (password != null || confirmPassword != null) {
-			if (password != confirmPassword) {
-
-				if (_alert != null) {
-					_alert.remove();
-				}
-				if (require) {
-
-					var parentDiv = document.getElementById("divRepasswordNew");
-					var inputElement = document.getElementById("repasswordNew");
-					var newDiv = document.createElement("div");
-					newDiv.innerHTML = '<div class="alert alert-danger" role="alert" id="passwordalert">Invalid Password!!!</div>';
-					parentDiv.insertBefore(newDiv, inputElement);
-				}
-				else {
-					var parentDiv = document.getElementById("divRepassword");
-					var inputElement = document.getElementById("repassword");
-					var newDiv = document.createElement("div");
-					newDiv.innerHTML = '<div class="alert alert-danger" role="alert" id="passwordalert">Invalid Password!!!</div>';
-					parentDiv.insertBefore(newDiv, inputElement);
-                }
-				
-				return false;
-			}
-		}
-
-		return true;
 	}
+
+	if (password != "" || confirmPassword != "") {
+		if (password != confirmPassword) {
+			alert("Wrong Comfirm Password!")
+			return false;
+		}
+	}
+
+	return true;
+	
 }
 
 
 /*================Check exists username=============*/
 
-function checkExistsUsername() {
+async function checkExistsUsername() {
 	var username = document.getElementById("userNameNew").value;
 	// Kiểm tra giá trị nhập vào
 	if (!username) {
 		alert('Username không được để trống');
-		return false;
+		return true;
 	}
-
-	// Gửi yêu cầu AJAX để kiểm tra giá trị bị trùng
-	$.ajax({
-		url: 'admin/UserInfos/CheckUsernameExist',
-		method: 'POST',
-		data: { userName: username },
-		success: function (response) {
-			if (response === 'true') {
-				alert('Username đã tồn tại');
-				return false;
-			} else {
-				alert("okiii");
+	await $.ajax({
+		url: 'NewUser/Check-Username',
+		type: 'POST',
+		data: { username: username },
+		success: function (result) {
+			if (result == true) {
+				alert("Username đã tồn tại!");
 				return true;
+			} else {
+				return false;
 			}
 		},
-		error: function () {
-			alert('Error!!');
+		error: function (xhr, status, error) {
+			console.log("Request failed:", error);
+			return true;
 		}
 	});
+	return false;
+
 }

@@ -32,5 +32,6 @@ namespace YVFlashCard.Areas.Admin.Middleware
 
             await _next(httpContext);
         }
-    }
+
+	}
 }

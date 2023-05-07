@@ -19,6 +19,7 @@ namespace YVFlashCard.Service.Interfaces
         Task<bool> CheckAccountExistsAsync(string username);
         Task UpdatePassword(UpdateInfoRequest request);
         Task UpdateInfo(UpdateInfoRequest request);
+        Task<bool> CreateNewUser(UpdateInfoRequest request);
     }
 
 

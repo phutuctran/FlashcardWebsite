@@ -21,7 +21,7 @@ go
 --end
 
 --add total number of word to setting
-drop trigger addTotalWord
+--drop trigger addTotalWord
 CREATE TRIGGER addTotalWord ON [Dictionary]
 FOR INSERT
 AS
@@ -31,10 +31,10 @@ begin
 	where Setting.Name = 'TW'
 end
 --end
-select 
+--select 
 --end
 --add total account to setting
-drop trigger addTotalAccounts
+--drop trigger addTotalAccounts
 CREATE TRIGGER addTotalAccounts ON [Accounts]
 FOR INSERT
 AS
@@ -53,20 +53,18 @@ create table [Setting] (
 create table Accounts(
 	UserName varchar(36) primary key,
 	PassWord varchar(20),
-	DateCreate Datetime
+	DateCreate Datetime default GETDATE()
 )
---alter table [Accounts]
---	drop column CreateDate
-alter table [Accounts]
-	add [DateCreate] datetime default GETDATE()
+--alter table [Accounts] drop column DateCreate
+--alter table [Accounts] add [DateCreate] datetime default GETDATE()
 
 alter table [Accounts] -- REGULAR / ADMIN
 	add [Role] varchar(1) default 'R'
 -- end add field
 create table Themes(
 	ThemeID int identity(1,1) primary key,
-	ThemeName varchar(max),
-	Mean varchar(max),
+	ThemeName nvarchar(max),
+	Mean nvarchar(max),
 	IllustrationImg varbinary(max),
 	Author varchar(36)
 	constraint FK_Theme_Acc foreign key(Author) references Accounts(UserName))

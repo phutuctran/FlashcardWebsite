@@ -33,14 +33,14 @@ namespace DBModels.Models
             modelBuilder.Entity<Accounts>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__Accounts__C9F284575CDF9DD5");
+                    .HasName("PK__Accounts__C9F28457E212E7C5");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
                 entity.Property(e => e.DateCreate)
-                    .HasColumnType("smalldatetime")
+                    .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.PassWord)
@@ -56,7 +56,7 @@ namespace DBModels.Models
             modelBuilder.Entity<Dictionary>(entity =>
             {
                 entity.HasKey(e => e.WordId)
-                    .HasName("PK__Dictiona__2C20F04629886DC0");
+                    .HasName("PK__Dictiona__2C20F0467D3E884F");
 
                 entity.Property(e => e.WordId).HasColumnName("WordID");
 
@@ -97,7 +97,7 @@ namespace DBModels.Models
             modelBuilder.Entity<ForgetWords>(entity =>
             {
                 entity.HasKey(e => e.ForgetWordId)
-                    .HasName("PK__ForgetWo__489DD9A270C627F1");
+                    .HasName("PK__ForgetWo__489DD9A254A2C85D");
 
                 entity.Property(e => e.ForgetWordId).HasColumnName("ForgetWordID");
 
@@ -119,7 +119,7 @@ namespace DBModels.Models
             modelBuilder.Entity<Setting>(entity =>
             {
                 entity.HasKey(e => e.Name)
-                    .HasName("PK__Setting__737584F797081D4E");
+                    .HasName("PK__Setting__737584F7698E16A7");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(32)
@@ -133,7 +133,7 @@ namespace DBModels.Models
             modelBuilder.Entity<SpeechParts>(entity =>
             {
                 entity.HasKey(e => e.SpeechPartName)
-                    .HasName("PK__SpeechPa__B4865E60C76100B9");
+                    .HasName("PK__SpeechPa__B4865E60F232972A");
 
                 entity.Property(e => e.SpeechPartName)
                     .HasMaxLength(20)
@@ -145,7 +145,7 @@ namespace DBModels.Models
             modelBuilder.Entity<Studies>(entity =>
             {
                 entity.HasKey(e => e.StudyId)
-                    .HasName("PK__Studies__1B4BFBF8E8D6242B");
+                    .HasName("PK__Studies__1B4BFBF826A01216");
 
                 entity.Property(e => e.StudyId).HasColumnName("StudyID");
 
@@ -168,7 +168,7 @@ namespace DBModels.Models
             modelBuilder.Entity<Synonyms>(entity =>
             {
                 entity.HasKey(e => e.SynonymId)
-                    .HasName("PK__Synonyms__066F63A3B22738C4");
+                    .HasName("PK__Synonyms__066F63A3612534C7");
 
                 entity.Property(e => e.SynonymId).HasColumnName("SynonymID");
 
@@ -190,17 +190,13 @@ namespace DBModels.Models
             modelBuilder.Entity<Themes>(entity =>
             {
                 entity.HasKey(e => e.ThemeId)
-                    .HasName("PK__Themes__FBB3E4B909E33BEA");
+                    .HasName("PK__Themes__FBB3E4B929A81A30");
 
                 entity.Property(e => e.ThemeId).HasColumnName("ThemeID");
 
                 entity.Property(e => e.Author)
                     .HasMaxLength(36)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Mean).IsUnicode(false);
-
-                entity.Property(e => e.ThemeName).IsUnicode(false);
 
                 entity.HasOne(d => d.AuthorNavigation)
                     .WithMany(p => p.Themes)
@@ -211,7 +207,7 @@ namespace DBModels.Models
             modelBuilder.Entity<UserInfos>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__UserInfo__C9F28457A11D3F29");
+                    .HasName("PK__UserInfo__C9F2845760974905");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(36)
@@ -238,10 +234,10 @@ namespace DBModels.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=YVFlashCard;Integrated Security=True;TrustServerCertificate=True;");
-            base.OnConfiguring(optionsBuilder);
-        }
-    }
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=YVFlashCard;Integrated Security=True;TrustServerCertificate=True;");
+			base.OnConfiguring(optionsBuilder);
+		}
+	}
 }

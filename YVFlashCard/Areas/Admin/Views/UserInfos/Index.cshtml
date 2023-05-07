@@ -3,17 +3,18 @@
 	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 @model List<YVFlashCard.Areas.Admin.Models.UserInfoModel>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- Set Befor Postition -->
 <script src="/AdminAssets/js/SaveScrollPosition.js"></script>
 <!-- ValidateAccount -->
 <script src="/AdminAssets/js/ValidateAccountModel.js"></script>
 <div class="app-content pt-3 p-md-3 p-lg-4">
 	<div class="container-xl">
-
 		<div class="row g-3 mb-4 align-items-center justify-content-between">
 			<div class="col-auto">
 				<h1 class="app-page-title mb-0">User Informations</h1>
-			</div>
+			</div>	
 			<div class="col-auto">
 				<div class="page-utilities">
 					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
@@ -30,106 +31,8 @@
 							}
 						</div>
 						<div class="col-auto">
-							<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#AddNewUser">New User</button>
-							<div class="modal fade" id="AddNewUser" tabindex="-1" role="dialog" aria-labelledby="AddNewUserModal" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									@using (Html.BeginForm("update-password", "UserInfos", FormMethod.Post, new { onsubmit = "return validateModalWhenCreate();" }))
-																{
-																	@Html.TextBox("currentPage", (int)@ViewBag.CurrentAccountPage, new {@type = "hidden"})
-																	
-
-																	<div class="modal-content">
-
-																		<div class="modal-header">
-																			<h5 class="modal-title" id="exampleModalLabel">Create New User:</h5>
-																		</div>
-																		<div class="modal-body">
-																			<div class="row">
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Username</label>
-																						@Html.TextBox("Username", null, new {@Id = "userNameNew", @class = "form-control", @type="text", @placeholder = "Username", @name="UserName"})
-
-																					</div>
-																				</div>
-																				<div class="col">
-																					<div class="mby-3">
-																						<label class="form-label">Role</label>
-																						@Html.DropDownList("Role", new List<SelectListItem>
-																						{
-																						new SelectListItem { Text = "Regular", Value = "R"},
-																						new SelectListItem { Text = "Admin", Value = "A"},
-																						}, new {@class="form-select", @id="RoleSelect", @selectedValue = "R"})
-																					</div>
-																				</div>
-																			</div>
-																			<div class="mb-3">
-																				<label for="exampleInputPassword" class="form-label">Password</label>
-																				@Html.TextBox("NewPassword", null, new {@class = "form-control", @type="password", @placeholder = "New Password", @name="NewPassword", @id="passwordNew"})
-																			</div>
-
-																			<div class="mb-3" id="divRepassword">
-																				<label for="exampleInputPassword" class="form-label" id="labelRepassword">Confirm Password</label>
-																				<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repasswordNew">
-																			</div>
-																			<div class="mb-3">
-																				<label class="form-label">First Name</label>
-																				@Html.TextBox("FirstName", null, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
-
-																			</div>
-																			<div class="mb-3">
-																				<label class="form-label">Last Name</label>
-																				@Html.TextBox("LastName", null, new {@class = "form-control", @tye="text",  @placeholder = "LastName", @name="LastName"})
-																			</div>
-																			<div class="row">
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Phone Number</label>
-																						@Html.TextBox("PhoneNumber", null, new {@Id = "phoneNumberNew", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
-
-																					</div>
-																				</div>
-																				<div class="col">
-																					<div class="mby-3">
-																						<label class="form-label">Email</label>
-																						@Html.TextBox("Email", null, new {@Id="emailNew", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
-																					</div>
-																				</div>
-																			</div>
-
-																			<div class="mb-3">
-																				<label class="form-label">Address</label>
-																				@Html.TextBox("Address", null, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
-																			</div>
-																			<div class="row">
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Age</label>
-																						@Html.TextBox("Age", null, new {@Id="ageNew", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
-																					</div>
-																				</div>
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Gender</label>
-
-																						@Html.DropDownList("Sex", new List<SelectListItem>
-																						{
-																						new SelectListItem { Text = "Male", Value = "Male"},
-																						new SelectListItem { Text = "Female", Value = "Female"},
-																						}, new {@class="form-select", @id="sexSelectNew", @selectedValue = "2"})
-
-																					</div>
-																				</div>
-																			</div>
-																			
-																		</div>
-																		<div class="modal-footer">
-																			<button type="submit" class="btn btn-primary">Save changes</button>
-																		</div>
-																	</div>
-																}
-								</div>
-							</div>
+							<a type="button" href="/admin/NewUser" value="New User" target="_blank" class="btn btn-primary btn-small text-white">New User</a>
+							
 
 						</div>
 					</div><!--//row-->
@@ -183,6 +86,7 @@
 																					@Html.TextBox("Username", account.Username, new {@type = "hidden"})
 																					@Html.TextBox("Role", null, new {@type = "hidden"})
 																					@Html.TextBox("currentPage", (int)@ViewBag.CurrentAccountPage, new {@type = "hidden"})
+																					@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
 																	
 
 																					<div class="modal-content">

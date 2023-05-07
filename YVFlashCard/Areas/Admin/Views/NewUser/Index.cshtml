@@ -1,0 +1,150 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@model YVFlashCard.Areas.Admin.Models.UserInfoModel
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Set Befor Postition -->
+<script src="/AdminAssets/js/SaveScrollPosition.js"></script>
+<!-- ValidateAccount -->
+<script src="/AdminAssets/js/ValidateAccountModel.js"></script>
+<!-- Image process-->
+<script src="/AdminAssets/js/ImageProcess.js"></script>
+<div class="app-content pt-3 p-md-3 p-lg-4">
+	<div class="container-xl">
+		<h1 class="app-page-title">Create New User</h1>
+		<hr class="mb-4">
+		<div class="row g-4 settings-section">
+			<div class="col-12 col-md-4">
+				<div class="mb-3">
+					<label class="font-weight-bold" for="customFile">Photo</label>
+					<div class="text-center">
+						<img Id="PhotoReview" src="/AdminAssets/images/profiles/profile-2.png" class="rounded" alt="...">
+					</div>
+					<input class="form-control" id="PhotoFileInput" type="file" accept=".jpg,.png">
+				</div>
+				
+			</div>
+			<div class="col-12 col-md-8">
+				<div class="app-card app-card-settings shadow-sm p-4">
+					@using (Html.BeginForm("Create-User", "NewUser", FormMethod.Post, new { @class = "my-form", onsubmit = "return CreatNewUserAsync(event);" }))
+					{
+						<input type="hidden" name="Avatar" id="PhotoArrayData"/>
+						<div class="app-card-body">
+							<div class="row">
+								<div class="col">
+									<div class="mb-3">
+										<label for="setting-input-1" class="form-label">
+											Username<span class="ms-2" data-container="body" data-bs-toggle="popover" data-trigger="hover" data-placement="top" data-content="This is a Bootstrap popover example. You can use popover to provide extra info.">
+											</span>
+										</label>
+										@Html.TextBoxFor(m => m.Username, new {@class = "form-control",  @type="text",  @placeholder = "Username", @name="password", @Id = "userNameNew"})
+									</div>
+								</div>
+								<div class="col">
+									<div class="mby-3">
+										<label class="form-label">Role</label>
+										@Html.DropDownListFor(m => m.Role, new List<SelectListItem>
+									{
+									new SelectListItem { Text = "Regular", Value = "R"},
+									new SelectListItem { Text = "Admin", Value = "A"},
+									}, new {@class="form-select", @id="RoleSelect"})
+									</div>
+								</div>
+							</div>
+							
+								<div class="mb-3">
+									<label for="setting-input-2" class="form-label">Password</label>
+									@Html.TextBoxFor(m => m.NewPassword, new {@class = "form-control",  @type="password",  @placeholder = "Password", @name="newpassword", @Id = "passwordNew"})
+								</div>
+								<div class="mb-3">
+									<label for="setting-input-3" class="form-label">Confirm Password</label>
+									<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repasswordNew">
+								</div>
+								<div class="mb-3">
+								<label class="form-label">First Name</label>
+								@Html.TextBoxFor(m => m.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
+
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Last Name</label>
+								@Html.TextBoxFor(m => m.LastName, new {@class = "form-control", @type="text",  @placeholder = "LastName", @name="LastName"})
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Phone Number</label>
+										@Html.TextBoxFor(m => m.PhoneNumber, new {@Id = "phoneNumberNew", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
+
+									</div>
+								</div>
+								<div class="col">
+									<div class="mby-3">
+										<label class="form-label">Email</label>
+										@Html.TextBoxFor(m => m.Email, new {@Id="emailNew", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
+									</div>
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label class="form-label">Address</label>
+								@Html.TextBoxFor(m => m.Address, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Age</label>
+										@Html.TextBoxFor(m => m.Age, new {@Id="ageNew", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
+									</div>
+								</div>
+								<div class="col">
+									<div class="mb-3">
+										<label class="form-label">Gender</label>
+
+										@Html.DropDownListFor(m => m.Sex, new List<SelectListItem>
+									{
+									new SelectListItem { Text = "Male", Value = "Male"},
+									new SelectListItem { Text = "Female", Value = "Female"},
+									}, new {@class="form-select", @id="sexSelectNew", @selectedValue = "1"})
+
+									</div>
+								</div>
+							</div>
+						<button type="submit" class="btn app-btn-primary">Create</button>
+							
+						</div>
+
+						<!--//app-card-body-->
+					}
+
+
+
+				</div><!--//app-card-->
+			</div>
+		</div><!--//row-->
+
+	</div>
+</div>
+<script>
+	const fileInput = document.getElementById('PhotoFileInput');
+	const previewImage = document.getElementById('PhotoReview');
+
+	fileInput.addEventListener('change', function () {
+		scaleImage(fileInput, previewImage, 200, 200);
+		const file = fileInput.files[0];
+
+		const reader = new FileReader();
+		reader.readAsArrayBuffer(file);
+
+		reader.onload = () => {
+			const arrayBuffer = reader.result;
+			const byteArray = new Uint8Array(arrayBuffer);
+			document.getElementById("PhotoArrayData").value = JSON.stringify(Array.from(byteArray));
+			//console.log(byteArray);
+		}
+		//var result = fileToByteArray(fileInput.file);
+		//alert(result);
+		//document.getElementById("Photodata").value = result;
+	});
+</script>
