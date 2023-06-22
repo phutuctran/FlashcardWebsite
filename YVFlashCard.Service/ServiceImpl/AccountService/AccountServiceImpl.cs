@@ -26,8 +26,13 @@ namespace YVFlashCard.Service.Users
             using var dbs = new YVFlashCardContext();
             return await dbs.Accounts.Where(u => u.UserName == username && u.PassWord == password).FirstOrDefaultAsync();
         }
+		public Accounts? Authenticate(string username, string password)
+		{
+			using var dbs = new YVFlashCardContext();
+			return dbs.Accounts.Where(u => u.UserName == username && u.PassWord == password).FirstOrDefault();
+		}
 
-        public async Task<Accounts> GetAccountByUsernameAsync(string username)
+		public async Task<Accounts> GetAccountByUsernameAsync(string username)
         {
             using var dbs = new YVFlashCardContext();
             return await dbs.Accounts.FirstOrDefaultAsync(u => u.UserName == username);
@@ -74,8 +79,15 @@ namespace YVFlashCard.Service.Users
 
             return await (new UserDTOAdapterIpml(listUsers)).GetUserDTOsAsync(); ;
         }
+		public async Task<UserDTO> GetUserInfoByUsernameAsync(string username)
+		{
+			using var dbs = new YVFlashCardContext();
+            var acc = await dbs.Accounts.Where(u => u.UserName == username).FirstOrDefaultAsync();
+            var userInfo = await dbs.UserInfos.Where(u => u.UserName == username).FirstOrDefaultAsync();
+            return new UserDTO(acc, userInfo);
+		}
 
-        public async Task UpdateInfo(UpdateInfoRequest request)
+		public async Task UpdateInfoAsync(UpdateInfoRequest request)
         {
           
             using var dbs = new YVFlashCardContext();
@@ -95,7 +107,7 @@ namespace YVFlashCard.Service.Users
             await dbs.SaveChangesAsync();
         }
 
-        public async Task UpdatePassword(UpdateInfoRequest request)
+        public async Task UpdatePasswordAsync(UpdateInfoRequest request)
         {
             using var dbs = new YVFlashCardContext();
             Accounts account = await dbs.Accounts.FirstOrDefaultAsync(u => u.UserName == request.Username);
@@ -116,18 +128,18 @@ namespace YVFlashCard.Service.Users
             return await dbs.Accounts.AnyAsync(u => u.UserName == username);
         }
 
-        public async Task<bool> CreateNewUser(UpdateInfoRequest request)
+        public async Task<bool> CreateNewUserAsync(UpdateInfoRequest request)
         {
 			
 			using (var context = new YVFlashCardContext())
 			{
-				var sql = "INSERT INTO Accounts (UserName, PassWord, DateCreate, Role) VALUES (@Col1, @Col2, @Col3, @Col4);";
+				var sql = "CreateNewAccount @userName, @passWord, @role";
         
-				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@Col1", request.Username), new SqlParameter("@Col2", request.NewPassword), new SqlParameter("@Col3", DateTime.Now), new SqlParameter("@Col4", request.Role));
+				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@userName", request.Username), new SqlParameter("@passWord", request.NewPassword), new SqlParameter("@role", request.Role));
 				Console.WriteLine(row.ToString());
 				if (row > 0)
 				{
-					await UpdateInfo(request);
+					await UpdateInfoAsync(request);
 					return true;
 				}
                 throw new Exception("Không thể thêm User mới!!!");
@@ -135,5 +147,24 @@ namespace YVFlashCard.Service.Users
 			}
 			throw new Exception("lỗi khi thêm User mới!!!");
         }
-    }
+
+		public async Task<bool> DeleteAccountandAllUserInfoAsync(UpdateInfoRequest request)
+		{
+			using (var context = new YVFlashCardContext())
+			{
+				var sql = "DeleteUser @username";
+
+				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@username", request.Username));
+				if (row > 0)
+				{
+					return true;
+				}
+				return false;
+
+			}
+			throw new Exception("Lỗi khi xóa User !!!");
+		}
+
+
+	}
 }

@@ -1,5 +1,4 @@
 ﻿using DBModels.Models;
-using Google.Api;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +14,6 @@ namespace YVFlashCard.Service.ServiceImpl.ThemeService
 {
 	public class ThemeServiceImpl : IThemeService
 	{
-		public readonly int DEFAULT_COUNT = 100;
 		public async Task<List<ThemeDTO>?> CheckExistsThemeByNameAsync(string themeName)
 		{
 			var dbs = new YVFlashCardContext();
@@ -32,34 +30,50 @@ namespace YVFlashCard.Service.ServiceImpl.ThemeService
 		{
 			using (var context = new YVFlashCardContext())
 			{
-				var sql = "INSERT INTO Themes (ThemeName, Mean, IllustrationImg, Author) VALUES (@Col1, @Col2, @Col3, @Col4);";
+				var sql = "CreateNewTheme @themeName, @mean, @img, @author, @role";
 
-				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@Col1", theme.themeName), new SqlParameter("@Col2", theme.mean), new SqlParameter("@Col3", theme.IllustrationImg), new SqlParameter("@Col4", theme.author));
+				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@themeName", theme.themeName), new SqlParameter("@mean", theme.mean), new SqlParameter("@img", theme.IllustrationImg), new SqlParameter("@author", theme.author), new SqlParameter("@role", theme.role));
 				//Console.WriteLine(row.ToString());
 				if (row > 0)
 				{
 					return true;
 				}
-				throw new Exception("Không thể thêm theme mới!!!");
+				return false;
 
 			}
 			throw new Exception("lỗi khi thêm theme mới!!!");
+		}
+		public async Task<bool> DeleteThemeAsync(ThemeDTO theme)
+		{
+			using (var context = new YVFlashCardContext())
+			{
+				var sql = "DeleteTheme @themeid";
+
+				int row = await context.Database.ExecuteSqlRawAsync(sql, new SqlParameter("@themeid", theme.themeId));
+				if (row > 0)
+				{
+					return true;
+				}
+				return false;
+
+			}
+			throw new Exception("Lỗi khi xóa theme mới!!!");
 		}
 
 
 		public async Task<List<ThemeDTO>?> GetThemeByAdminAsync(int count = 0, string keySearch = "")
 		{
-			return await GetThemeByUserAsync("Admin", count, keySearch);
+			return await GetThemeByUserAsync("A", count, keySearch);
 
 		}
 
-		public async Task<List<ThemeDTO>?> GetThemeByUserAsync(string User, int count = 0, string keySearch = "")
+		public async Task<List<ThemeDTO>?> GetThemeByUserAsync(string role, int count = 0, string keySearch = "")
 		{
-			count = count == 0 ? DEFAULT_COUNT : count;
+			count = count == 0 ? SettingTypes.DEFAULT_COUNT : count;
 			var dbs = new YVFlashCardContext();
 			keySearch = string.IsNullOrEmpty(keySearch)? "" : keySearch.Trim();
 			
-			var themes = await dbs.Themes.Where(u => u.Author == User && (u.ThemeName.Contains(keySearch) || u.Mean.Contains(keySearch))).Take(count).ToListAsync();
+			var themes = await dbs.Themes.Where(u => u.Role == role && (u.ThemeName.Contains(keySearch) || u.Mean.Contains(keySearch))).Take(count).ToListAsync();
 			List<ThemeDTO> result = new List<ThemeDTO>();
 			themes.ForEach(i =>  result.Add(new ThemeDTO(i)));
 			return result;

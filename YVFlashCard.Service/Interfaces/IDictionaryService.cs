@@ -8,12 +8,16 @@ using YVFlashCard.Service.Vocabularies.DTO;
 
 namespace YVFlashCard.Service.Interfaces
 {
-	public interface IDictionaryService
+	public interface IDictionaryWordService
 	{
-		Task<Dictionary?> AuthenticateAsync(string wordID);
 
-		Task<List<VocabularyDTO>> GetAllVocabularyAsync();
-
-        Task<List<VocabularyDTO>> GetVocabularyByTopAsync(int count);
+        Task<List<VocabularyDTO>> GetVocabularyAsync(IGetVocabularyStrategy getVocabulary);
+		Task<bool> CreateNewVocabularyAsync(VocabularyDTO vocabulary);
+		Task<bool> DeleteVocabularyAsync(VocabularyDTO vocabulary);
     }
+
+	public interface IGetVocabularyStrategy
+	{
+		Task<List<Dictionary>> GetVocabularyAsync();
+	}
 }

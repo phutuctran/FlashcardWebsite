@@ -51,6 +51,11 @@ namespace DBModels.Models
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('R')");
+
+                entity.Property(e => e.State)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('A')");
             });
 
             modelBuilder.Entity<Dictionary>(entity =>
@@ -69,6 +74,11 @@ namespace DBModels.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Mean).IsUnicode(false);
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('R')");
 
                 entity.Property(e => e.SpeechPart)
                     .HasMaxLength(20)
@@ -197,6 +207,19 @@ namespace DBModels.Models
                 entity.Property(e => e.Author)
                     .HasMaxLength(36)
                     .IsUnicode(false);
+
+                entity.Property(e => e.DateCreate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Lastupdate).HasColumnType("datetime");
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('R')");
+
+                entity.Property(e => e.TotalLevel).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.AuthorNavigation)
                     .WithMany(p => p.Themes)

@@ -23,6 +23,25 @@
 						<img Id="PhotoReview" src="/AdminAssets/images/profiles/profile-2.png" class="rounded" alt="...">
 					</div>
 					<input class="form-control" id="PhotoFileInput" type="file" accept=".jpg,.png">
+					<script>
+						const fileInput = document.getElementById('PhotoFileInput');
+						const previewImage = document.getElementById('PhotoReview');
+						fileInput.addEventListener('change', function () {
+							scaleImage(fileInput, previewImage, 200, 200);
+							const file = fileInput.files[0];
+
+							const reader = new FileReader();
+							reader.readAsArrayBuffer(file);
+
+							reader.onload = () => {
+								const arrayBuffer = reader.result;
+								const byteArray = new Uint8Array(arrayBuffer);
+
+								document.getElementById("PhotoArrayData").value = JSON.stringify(Array.from(byteArray));
+							}
+							
+						});
+					</script>
 				</div>
 				
 			</div>
@@ -126,25 +145,3 @@
 
 	</div>
 </div>
-<script>
-	const fileInput = document.getElementById('PhotoFileInput');
-	const previewImage = document.getElementById('PhotoReview');
-
-	fileInput.addEventListener('change', function () {
-		scaleImage(fileInput, previewImage, 200, 200);
-		const file = fileInput.files[0];
-
-		const reader = new FileReader();
-		reader.readAsArrayBuffer(file);
-
-		reader.onload = () => {
-			const arrayBuffer = reader.result;
-			const byteArray = new Uint8Array(arrayBuffer);
-			document.getElementById("PhotoArrayData").value = JSON.stringify(Array.from(byteArray));
-			//console.log(byteArray);
-		}
-		//var result = fileToByteArray(fileInput.file);
-		//alert(result);
-		//document.getElementById("Photodata").value = result;
-	});
-</script>

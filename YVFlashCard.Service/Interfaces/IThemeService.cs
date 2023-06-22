@@ -14,5 +14,6 @@ namespace YVFlashCard.Service.Interfaces
 		Task<List<ThemeDTO>?> GetThemeByUserAsync(string User, int count, string keySearch);
 		Task UpdateThemeAsync(ThemeDTO theme);
 		Task<bool> CreateNewThemeAsync(ThemeDTO theme);
+		Task<bool> DeleteThemeAsync(ThemeDTO theme);
 	}
 }

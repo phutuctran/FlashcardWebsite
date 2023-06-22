@@ -1,5 +1,4 @@
 ﻿using DBModels.Models;
-using Google;
 using System;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YVFlashCard.Service.Interfaces;
-using static Grpc.Core.Metadata;
 using YVFlashCard.Service.Types;
 
 namespace YVFlashCard.Service.VisitCounter

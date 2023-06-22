@@ -1,16 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@{
+﻿@{
 	ViewData["Title"] = "Index";
 	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-@model YVFlashCard.Areas.Admin.Models.UserInfoModel
+@model List<YVFlashCard.Areas.Admin.Models.VocabularyModel>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Set Befor Postition -->
+<script src="/AdminAssets/js/SaveScrollPosition.js"></script>
+<!-- Validatetheme -->
+<script src="/AdminAssets/js/ValidatethemeModel.js"></script>
+<!-- Image process-->
+<script src="/AdminAssets/js/ImageProcess.js"></script>
 <div class="app-content pt-3 p-md-3 p-lg-4">
 	<div class="container-xl">
-
 		<div class="row g-3 mb-4 align-items-center justify-content-between">
 			<div class="col-auto">
 				<h1 class="app-page-title mb-0">User Informations</h1>
@@ -19,14 +21,89 @@
 				<div class="page-utilities">
 					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
 						<div class="col-auto">
-							<form class="table-search-form row gx-1 align-items-center">
+							@using (Html.BeginForm("Index", "Dictionary", FormMethod.Get, new { @class = "table-search-form row gx-1 align-items-center" }))
+							{
 								<div class="col-auto">
-									<input type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Search">
+									@Html.TextBox("keySearch", "", new {@type="text", @id="search-orders", @name="searchorders", @class="form-control search-orders", @placeholder="Search"})
 								</div>
 								<div class="col-auto">
 									<button type="submit" class="btn app-btn-secondary">Search</button>
 								</div>
-							</form>
+
+							}
+						</div>
+						<div class="col-auto">
+							<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#CreateThemeModal">New Theme</button>
+							<div class="modal fade" id="CreateThemeModal" tabindex="-1" role="dialog" aria-labelledby="CreateThemeModal" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+
+									@using (Html.BeginForm("create-theme", "Theme", FormMethod.Post, new { onsubmit = "return CreateNewThemeAsync(event);" }))
+									{
+
+
+										@Html.TextBox("author", (string)ViewBag.Username, new {@type="hidden"})
+										@Html.TextBox("role", "A", new {@type="hidden"})
+										@Html.TextBox("currentPage", (int)ViewBag.CurrentPage, new {@type = "hidden"})
+										@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
+										<input type="hidden" name="IlluImg" id="PhotoArrayData" />
+
+										<div class="modal-content">
+
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Create new theme!</h5>
+											</div>
+											<div class="modal-body">
+
+
+												<div class="mb-3">
+													<label class="form-label">Theme name</label>
+													@Html.TextBox("themeName", "", new {@class = "form-control",  @type="text",  @placeholder = "Theme name", @name="themeName"})
+
+												</div>
+												<div class="mb-3">
+													<label class="form-label">Description</label>
+													@Html.TextBox("mean", "", new {@class = "form-control", @tye="text",  @placeholder = "Description", @name="mean"})
+												</div>
+												<div class="mb-3">
+													<label class="form-label">Illustration Image</label>
+													<div class="text-center">
+														<img Id="PhotoReview" src="/AdminAssets/images/profiles/profile-2.png" class="rounded" alt="...">
+													</div>
+													<input class="form-control" id="PhotoFileInput" type="file" accept=".jpg,.png">
+												</div>
+												<script>
+													const fileInput = document.getElementById('PhotoFileInput');
+													const previewImage = document.getElementById('PhotoReview');
+
+													fileInput.addEventListener('change', function () {
+														scaleImage(fileInput, previewImage, 200, 200);
+														const file = fileInput.files[0];
+
+														const reader = new FileReader();
+														reader.readAsArrayBuffer(file);
+
+														reader.onload = () => {
+															const arrayBuffer = reader.result;
+															const byteArray = new Uint8Array(arrayBuffer);
+															//console.log(JSON.stringify(Array.from(byteArray)));
+															document.getElementById("PhotoArrayData").value = JSON.stringify(Array.from(byteArray));
+
+														}
+
+													});
+												</script>
+											</div>
+											<div class="modal-footer">
+												<button type="submit" class="btn btn-primary">Save changes</button>
+											</div>
+										</div>
+
+									}
+
+
+								</div>
+							</div>
+
 
 						</div>
 					</div><!--//row-->
@@ -38,7 +115,7 @@
 
 
 
-		<div class="tab-content" id="orders-table-tab-content">
+		<div class="tab-content">
 			<div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
 				<div class="app-card app-card-orders-table shadow-sm mb-5">
 					<div class="app-card-body">
@@ -46,131 +123,119 @@
 							<table class="table app-table-hover mb-0 text-left">
 								<thead>
 									<tr>
-										<th class="cell">Username</th>
-										<th class="cell">Role</th>
-										<th class="cell">First Name</th>
-										<th class="cell">Last Name</th>
-										<th class="cell">Phone Number</th>
-										<th class="cell">Email</th>
+										<th class="cell">Theme name</th>
+										<th class="cell">Description</th>
+										<th class="cell">Total level</th>
+										<th class="cell"></th>
 										<th class="cell"></th>
 									</tr>
 								</thead>
 								<tbody>
 									@{
-										if (ViewBag.Accounts != null)
+										if (Model != null)
 										{
-											@foreach (var account in ViewBag.Accounts)
+											@for (int i = 0; i < Model.Count; i++)
 											{
+												var vob = Model[i];
 												<tr>
-													<td class="cell">@account.Username</td>
-													<td class="cell">@account.Role</td>
-													<td class="cell"><span class="truncate">@account.FirstName</span></td>
-													<td class="cell"><span class="truncate">@account.LastName</span></td>
-													<td class="cell">@account.PhoneNumber</td>
-													<td class="cell">@account.Email</td>
+													<td class="cell">@vob.WordText</td>
+													<td class="cell">@vob.Mean</td>
+													<td class="cell">N/a</td>
+
 													<td>
-														<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#changePasswordModal-@account.Username">Change</button>
-														<div class="modal fade" id="changePasswordModal-@account.Username" tabindex="-1" role="dialog" aria-labelledby="changePasswordModal-@account.Username" aria-hidden="true">
+														<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#changeInfoVobModal-@vob.WordID">Detail</button>
+														<div class="modal fade" id="changeInfovobModal-@vob.WordID" tabindex="-1" role="dialog" aria-labelledby="changeInfoVobModal-@vob.WordID" aria-hidden="true">
 															<div class="modal-dialog" role="document">
 
-																@using (Html.BeginForm("update-password", "UserInfos", FormMethod.Post, new { onsubmit = "return validateModal();" }))
+																@using (Html.BeginForm("update-vob", "vob", FormMethod.Post, new { }))
 																{
-																	Model.Username = account.Username;
-																	Model.DateCreate = account.DateCreate;
-																	Model.FirstName = account.FirstName;
-																	Model.LastName = account.LastName;
-																	Model.PhoneNumber = account.PhoneNumber;
-																	Model.Address = account.Address;
-																	Model.Email = account.Email;
-																	Model.Age = account.Age;
-																	Model.Sex = account.Sex;
-																	Model.Role = account.Role;
+																	@Html.TextBox("WordID", vob.WordID, new {@type = "hidden"})
+																	@Html.TextBox("IllustrationImg", vob.IllustrationImg, new {@type = "hidden"})
+																	@Html.TextBox("Author", vob.Author, new {@type="hidden"})
+																	@Html.TextBox("currentPage", (int)ViewBag.CurrentPage, new {@type = "hidden"})
+																	@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
+
 
 																	<div class="modal-content">
 
 																		<div class="modal-header">
-																			<h5 class="modal-title" id="exampleModalLabel">Change information: @account.Username</h5>
+																			<h5 class="modal-title" id="exampleModalLabel">Change vob's information': @vob.WordText</h5>
 																		</div>
 																		<div class="modal-body">
-																			@Html.TextBox("Username", null, new {@type = "hidden"});
-																			@Html.TextBox("Sex", null, new {@type = "hidden"});
+
+
 																			<div class="mb-3">
-																				<label class="form-label">First Name</label>
-																				@Html.TextBoxFor(model=>model.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
+																				<label class="form-label">vob name</label>
+																				@Html.TextBox("WordText", vob.WordText, new {@class = "form-control",  @type="text",  @placeholder = "vob name", @name="vobName"})
 
 																			</div>
 																			<div class="mb-3">
-																				<label class="form-label">Last Name</label>
-																				@Html.TextBoxFor(model=>model.LastName, new {@class = "form-control", @tye="text",  @placeholder = "LastName", @name="LastName"})
-																			</div>
-																			<div class="row">
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Phone Number</label>
-																						@Html.TextBoxFor(model=>model.PhoneNumber, new {@Id = "phoneNumber", @class = "form-control", @type="text", @placeholder = "PhoneNumber", @name="PhoneNumber"})
-
-																					</div>
-																				</div>
-																				<div class="col">
-																					<div class="mby-3">
-																						<label class="form-label">Email</label>
-																						@Html.TextBoxFor(model=>model.Email, new {@Id="email", @class = "form-control", @type="text", @placeholder = "Email", @name="Email"})
-																					</div>
-																				</div>
-																			</div>
-
-																			<div class="mb-3">
-																				<label class="form-label">Address</label>
-																				@Html.TextBoxFor(model=>model.Address, new {@class = "form-control", @type="text", @placeholder = "Address", @name="Address"})
-																			</div>
-																			<div class="row">
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Age</label>
-																						@Html.TextBoxFor(model=>model.Age, new {@Id="age", @class = "form-control", @type="text", @placeholder = "Age", @name="Age"})
-																					</div>
-																				</div>
-																				<div class="col">
-																					<div class="mb-3">
-																						<label class="form-label">Sex</label>
-																						<select class="form-select" aria-label=".form-select-sm example" id="sexSelect">
-																							<option value="Male">Male</option>
-																							<option value="Female">Female</option>
-																						</select>
-																						<script>
-																							var selectElement = document.getElementById("sexSelect");
-																							selectElement.value = @Model.Sex;
-																							selectElement.addEventListener("change", function () {
-																								var selectedValue = selectElement.value;
-																							@Model.Sex = selectedValue;
-																							});
-																						</script>
-																					</div>
-																				</div>
+																				<label class="form-label">Description</label>
+																				@Html.TextBox("Mean",vob.Mean, new {@class = "form-control", @tye="text",  @placeholder = "Description", @name="mean"})
 																			</div>
 																			<div class="mb-3">
-																				<label for="exampleInputPassword" class="form-label">Password</label>
-																				@Html.TextBoxFor(model=>model.NewPassword, new {@class = "form-control", @type="password", @placeholder = "New Password", @name="NewPassword", @id="password"})
+																				<label class="form-label">Illustration Image</label>
+																				<div class="text-center" id="PhotoReviewDiv">
+																					<img Id="PhotoReview" src="" class="rounded" alt="...">
+																				</div>
+																				<script>
+																					var byteArray = JSON.parse('@Html.Raw(Json.Serialize(vob.IllustrationImg))');
+
+																					var base64String = btoa(String.fromCharCode.apply(null, byteArray));
+
+																					var img = document.getElementById("PhotoReview");
+
+																					img.src = 'data:image/png;base64,' + base64String;
+																				</script>
 																			</div>
 
-																			<div class="mb-3" id="divRepassword">
-																				<label for="exampleInputPassword" class="form-label" id="labelRepassword">Confirm Password</label>
-																				<input type="password" class="form-control" placeholder="Comfirm New Password" name="repassword" id="repassword">
-																			</div>
 																		</div>
 																		<div class="modal-footer">
 																			<button type="submit" class="btn btn-primary">Save changes</button>
+																		</div>
+																	</div>
+
+																}
+
+
+															</div>
+														</div>
+
+													</td>
+													<td>
+														<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#Deletevob-@vob.WordID">Delete</button>
+														<div class="modal fade" id="Deletevob-@vob.WordID" tabindex="-1" role="dialog" aria-labelledby="Deletevob-@vob.WordID" aria-hidden="true">
+															<div class="modal-dialog" role="document">
+
+																@using (Html.BeginForm("delete-vob", "vob", FormMethod.Post, new { }))
+																{
+																	@Html.TextBox("currentPage", (int)ViewBag.CurrentPage, new {@type = "hidden"})
+																	@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
+																	@Html.TextBox("WordID", vob.WordID, new {@type = "hidden"})
+																	<div class="modal-content">
+
+																		<div class="modal-header">
+																			<h5 class="modal-title" id="exampleModalLabel">Delete vob: @vob.WordText ?</h5>
+																		</div>
+
+																		<div class="modal-footer">
+																			<button type="submit" class="btn btn-primary">Delete</button>
 																		</div>
 																	</div>
 																}
 															</div>
 														</div>
 													</td>
+
+
+
 												</tr>
 											}
+
 										}
 									}
 								</tbody>
+
 							</table>
 						</div><!--//table-responsive-->
 
@@ -179,9 +244,32 @@
 
 			</div><!--//tab-pane-->
 		</div><!--//tab-content-->
-
-		<script src="/AdminAssets/js/app.js"></script>
-
-
+		<div style="text-align: center;">
+			@Html.ActionLink("Load more", "Index", "Dictionary", new {keySearch = @ViewBag.KeySearch, page = @ViewBag.CurrentPage + 1}, null)
+		</div>
 	</div><!--//container-fluid-->
 </div><!--//app-content-->
+<script>
+	async function CreateNewThemeAsync(event) {
+		event.preventDefault(); // Ngăn chặn form submit mặc định
+		let check = true;
+		if (check) {
+			const form = event.target;
+			const formData = new FormData(form);
+			//event.target.submit();
+			const response = await fetch(form.action, {
+				method: form.method,
+				body: formData
+			});
+			if (response.ok) {
+				alert("Đã tạo từ mới!");
+				location.reload();
+				return true;
+			}
+			else {
+				alert("Lỗi khi tạo từ!");
+			}
+			return false;
+		}
+	}
+</script>

@@ -26,7 +26,7 @@ namespace YVFlashCard.Service.Users.DTO
 		public string Sex { get; set; }
 		public byte[] Avatar { get; set; }
 		public string Role { get; set; }
-
+		public string State { get; set; }
 		public UserDTO() { }
 
 		public UserDTO(UserDTO user)
@@ -47,6 +47,7 @@ namespace YVFlashCard.Service.Users.DTO
             Sex = user.Sex;
             Avatar = user.Avatar;
             Role = user.Role;
+			State = user.State;
         }
 
 		public UserDTO(Accounts acc, UserInfos userInfo)
@@ -65,6 +66,7 @@ namespace YVFlashCard.Service.Users.DTO
 				this.Role = "Quản trị viên";
 			else
 				this.Role = "Người dùng";
+			State = acc.State;
 		}
 	}
 }

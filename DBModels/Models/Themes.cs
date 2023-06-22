@@ -15,8 +15,12 @@ namespace DBModels.Models
         public int ThemeId { get; set; }
         public string ThemeName { get; set; }
         public string Mean { get; set; }
-        public byte[] IllustrationImg { get; set; }
         public string Author { get; set; }
+        public DateTime? DateCreate { get; set; }
+        public DateTime? Lastupdate { get; set; }
+        public string Role { get; set; }
+        public int? TotalLevel { get; set; }
+        public byte[] IllustrationImg { get; set; }
 
         public virtual Accounts AuthorNavigation { get; set; }
         public virtual ICollection<Dictionary> Dictionary { get; set; }

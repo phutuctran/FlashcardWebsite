@@ -1,7 +1,7 @@
 ﻿function scaleImage(fileInput, img, maxWidth, maxHeight) {
-
     // Lấy file ảnh từ file input
     const file = fileInput.files[0];
+    
 
     // Tạo đối tượng FileReader để đọc dữ liệu của file ảnh
     const reader = new FileReader();
@@ -34,6 +34,7 @@
 
             // Hiển thị ảnh đã scale lên thẻ img
             img.src = canvas.toDataURL('image/jpeg');
+
         };
     };
 
@@ -48,5 +49,6 @@ function fileToByteArray(file) {
         };
         reader.onerror = reject;
         reader.readAsArrayBuffer(file.files[0]);
+        
     });
 }

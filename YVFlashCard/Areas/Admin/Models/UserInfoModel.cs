@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Framework;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Security;
+using System.Text;
+using YVFlashCard.Service.Interfaces;
+using YVFlashCard.Service.ServiceImpl.ImageProcessService;
 using YVFlashCard.Service.Users.DTO;
 
 namespace YVFlashCard.Areas.Admin.Models
@@ -29,6 +35,8 @@ namespace YVFlashCard.Areas.Admin.Models
 		public string Sex { get; set; }
 		public byte[] Avatar { get; set; }
 		public string Role { get; set; }
+
+		private IImageProcessService imageProcess = new ImageProcessServiceImpl();
 
 		public UserInfoModel() : base()
         {

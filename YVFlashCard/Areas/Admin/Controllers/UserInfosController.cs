@@ -1,4 +1,5 @@
-﻿using DBModels.Models;
+﻿using Azure.Core;
+using DBModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -43,12 +44,19 @@ namespace YVFlashCard.Areas.Admin.Controllers
 		[ActionName("update-Password")]
 		public async Task<IActionResult> UpdateInfo(UserInfoModel model)
 		{
-			await this.accountService.UpdatePassword(model.GetUpdateInfoRequest());
-			await this.accountService.UpdateInfo(model.GetUpdateInfoRequest());
+			await this.accountService.UpdatePasswordAsync(model.GetUpdateInfoRequest());
+			await this.accountService.UpdateInfoAsync(model.GetUpdateInfoRequest());
 			return Redirect($"/admin/UserInfos?page={Request.Form["currentPage"]}&keySearch={Request.Form["KeySearch"]}");
 		}
 
-
+		[HttpPost]
+		[ActionName("delete-user")]
+		public async Task<IActionResult> DeleteUser(UserInfoModel model)
+		{
+			bool isOk =  await this.accountService.DeleteAccountandAllUserInfoAsync(model.GetUpdateInfoRequest());
+			ViewBag.DeleteSuccess = isOk;
+			return Redirect($"/admin/UserInfos?page={Request.Form["currentPage"]}&keySearch={Request.Form["keySearch"]}");
+		}
 
 
 

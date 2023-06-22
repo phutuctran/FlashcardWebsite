@@ -24,12 +24,12 @@ namespace YVFlashCard.Areas.Admin.Middleware
 
                 Accounts loginedAccount = await accountService.GetAccountByUsernameAsync(username);
                 httpContext.Items["CurrenUser"] = loginedAccount;
-            }
+                httpContext.Items.Add("CurrentUsername", loginedAccount.UserName);
+			}
             else
             {
                 Console.WriteLine("not found cookie");
             }
-
             await _next(httpContext);
         }
 

@@ -20,9 +20,10 @@ namespace DBModels.Models
         public string SpeechPart { get; set; }
         public int? ThemeId { get; set; }
         public int? Level { get; set; }
-        public byte[] IllustrationImg { get; set; }
         public string Author { get; set; }
         public DateTime? DateCreate { get; set; }
+        public string Role { get; set; }
+        public byte[] IllustrationImg { get; set; }
 
         public virtual Accounts AuthorNavigation { get; set; }
         public virtual SpeechParts SpeechPartNavigation { get; set; }

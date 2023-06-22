@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Web;
+@{
 	ViewData["Title"] = "Index";
 	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -7,6 +8,8 @@
 
 <!-- Set Befor Postition -->
 <script src="/AdminAssets/js/SaveScrollPosition.js"></script>
+<!-- Image process-->
+<script src="/AdminAssets/js/ImageProcess.js"></script>
 <!-- ValidateAccount -->
 <script src="/AdminAssets/js/ValidateAccountModel.js"></script>
 <div class="app-content pt-3 p-md-3 p-lg-4">
@@ -59,6 +62,7 @@
 										<th class="cell">Phone Number</th>
 										<th class="cell">Email</th>
 										<th class="cell"></th>
+										<th class="cell"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -87,7 +91,7 @@
 																					@Html.TextBox("Role", null, new {@type = "hidden"})
 																					@Html.TextBox("currentPage", (int)@ViewBag.CurrentAccountPage, new {@type = "hidden"})
 																					@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
-																	
+																					
 
 																					<div class="modal-content">
 
@@ -95,8 +99,42 @@
 																							<h5 class="modal-title" id="exampleModalLabel">Change information: @account.Username</h5>
 																						</div>
 																						<div class="modal-body">
+																							<div class="mb-3">
+																				@{
+																					var url =  @"/AdminAssets/images/profiles/profile-2.png";
+																				}
+																								<label class="font-weight-bold" for="customFile">Photo</label>
+																								<div class="text-center">
+																					<img Id="PhotoReview" src=@url class="rounded" alt="...">
+																								</div>
+																								<input class="form-control" id="PhotoFileInput" type="file" accept=".jpg,.png">
+																							</div>
 																							
+	
+																							<script>
+																								const fileInput = document.getElementById('PhotoFileInput');
+																								const previewImage = document.getElementById('PhotoReview');
 
+																								fileInput.addEventListener('change', function () {
+																									scaleImage(fileInput, previewImage, 100, 100);
+
+																									const file = fileInput.files[0];
+																									
+																									const reader = new FileReader();
+																									reader.readAsArrayBuffer(file);
+													
+																									reader.onload = () => {
+																										const arrayBuffer = reader.result;
+																										const byteArray = new Uint8Array(arrayBuffer);
+											
+																										document.getElementById("PhotoArrayData").value = JSON.stringify(Array.from(byteArray));
+																										
+																									}
+																									//var result = fileToByteArray(fileInput.file);
+																									//alert(result);
+																									//document.getElementById("Photodata").value = result;
+																								});
+																							</script>
 																							<div class="mb-3">
 																								<label class="form-label">First Name</label>
 																								@Html.TextBox("FirstName", account.FirstName, new {@class = "form-control",  @type="text",  @placeholder = "FirstName", @name="FirstName"})
@@ -167,6 +205,30 @@
 																			</div>
 																		</div>
 																
+																	</td>
+																	<td>
+																	<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#Deleteuser-@account.Username">Delete</button>
+																	<div class="modal fade" id="Deleteuser-@account.Username" tabindex="-1" role="dialog" aria-labelledby="Deleteuser-@account.Username" aria-hidden="true">
+																		<div class="modal-dialog" role="document">
+
+																			@using (Html.BeginForm("delete-user", "UserInfos", FormMethod.Post, new { }))
+																			{
+																				@Html.TextBox("currentPage", (int)ViewBag.CurrentAccountPage, new {@type = "hidden"})
+																				@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
+																				@Html.TextBox("Username", account.Username, new {@type = "hidden"})
+																				<div class="modal-content">
+
+																									<div class="modal-header">
+																										<h5 class="modal-title" id="exampleModalLabel">Delete User: @account.Username ?</h5>
+																									</div>
+																									
+																									<div class="modal-footer">
+																										<button type="submit" class="btn btn-primary">Delete</button>
+																									</div>
+																				</div>
+																			}
+																		</div>
+																	</div>
 																	</td>
 																</tr>
 											}

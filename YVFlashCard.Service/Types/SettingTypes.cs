@@ -12,5 +12,6 @@ namespace YVFlashCard.Service.Types
 		public static readonly string USER_VISIT_COUNTER = "UVC";
         public static readonly string TOTAL_WORDS = "TW";
 		public static readonly string TOTAL_ACCOUNT = "TA";
+		public static readonly int DEFAULT_COUNT = 100;
     }
 }

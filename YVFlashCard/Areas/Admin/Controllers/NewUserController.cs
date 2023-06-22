@@ -1,12 +1,13 @@
 ﻿using DBModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 using System.Text;
 using YVFlashCard.Areas.Admin.Middleware;
 using YVFlashCard.Areas.Admin.Models;
 using YVFlashCard.Service.Interfaces;
 using YVFlashCard.Service.Users.DTO;
-
 namespace YVFlashCard.Areas.Admin.Controllers
 {
 	[Area("Admin")]
@@ -16,12 +17,15 @@ namespace YVFlashCard.Areas.Admin.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private IAccountService accountService;
+		private readonly IWebHostEnvironment _hostEnvironment;
 
 		public NewUserController(ILogger<HomeController> logger,
-			IAccountService accountService)
+			IAccountService accountService,
+			IWebHostEnvironment hostEnvironment)
 		{
 			_logger = logger;
 			this.accountService = accountService;
+			_hostEnvironment = hostEnvironment;	
 		}
 
 		[HttpGet]
@@ -34,12 +38,19 @@ namespace YVFlashCard.Areas.Admin.Controllers
 		[ActionName("Create-User")]
 		public async Task<IActionResult> CreateUser(UserInfoModel model)
 		{
-			var stringValues = Request.Form["Avatar"];
-			model.Avatar = Encoding.UTF8.GetBytes(stringValues);
+			model.Avatar = null;
+			var byteArray = Encoding.UTF8.GetBytes(Request.Form["Avatar"]);
+			//System.IO.File.WriteAllBytes("D:\\test.txt", byteArray);
+			if (byteArray != null)
+			{
+				model.Avatar = byteArray;
+			}
+			
 
+			
 
 			ViewBag.isCreateNewUser = false;
-			bool isCreate = await this.accountService.CreateNewUser(model.GetUpdateInfoRequest());
+			bool isCreate = await this.accountService.CreateNewUserAsync(model.GetUpdateInfoRequest());
 			if (isCreate)
 			{
 				ViewBag.isCreateNewUser = true;

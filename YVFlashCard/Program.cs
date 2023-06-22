@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.OpenApi.Models;
 using YVFlashCard.Areas.Admin.Middleware;
 using YVFlashCard.Service.Interfaces;
+using YVFlashCard.Service.ServiceImpl.ImageProcessService;
 using YVFlashCard.Service.ServiceImpl.ThemeService;
 using YVFlashCard.Service.Users;
+using YVFlashCard.Service.Vocabularies;
 
 namespace YVFlashCard
 {
@@ -65,6 +67,7 @@ namespace YVFlashCard
         {
             services.AddScoped<IAccountService, AccountServiceImpl>();
 			services.AddScoped<IThemeService, ThemeServiceImpl>();
+			services.AddScoped<IDictionaryWordService, DictionaryServiceImpl>();
 
 			services.AddSwaggerGen(c =>
             {
@@ -75,7 +78,7 @@ namespace YVFlashCard
                 .AddCookie();
 
             services.AddHttpContextAccessor();
-        }
+		}
     }
 
 }

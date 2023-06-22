@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--TextBlock userinformation in home view-->
+    <Style x:Key="TextBlockUserInfo" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Grid.ColumnSpan" Value="2"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+    </Style>
+    
+    
+    <!--Textblock 1 for level choose-->
+    <Style x:Key="Textblock1levelchoose" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontStretch" Value="Medium"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="10, 0, 0, 0"/>
+    </Style>
+
+    <!--Textblock 2 for level choose-->
+    <Style x:Key="Textblock2levelchoose" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontStretch" Value="Medium"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+</ResourceDictionary>

@@ -11,28 +11,6 @@
 <script src="/AdminAssets/js/ValidatethemeModel.js"></script>
 <!-- Image process-->
 <script src="/AdminAssets/js/ImageProcess.js"></script>
-@{
-	if (@ViewBag.CreateSuccess != null)
-	{
-		if (@ViewBag.CreateSuccess)
-		{
-			<div classs="container p-5">
-				<div class="row no-gutters">
-					<div class="col-lg-6 col-md-12 m-auto">
-						<div class="alert alert-success fade show" role="alert">
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="True">&times;</span>
-							</button>
-							<h4 class="alert-heading">Well done!</h4>
-							<p>This is an alert within a column. The column can be made any size at different viewpoints.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		}
-	}
-	
-}
 <div class="app-content pt-3 p-md-3 p-lg-4">
 	<div class="container-xl">
 		<div class="row g-3 mb-4 align-items-center justify-content-between">
@@ -63,7 +41,8 @@
 									{
 			
 										
-										@Html.TextBox("author", "Admin", new {@type="hidden"})
+										@Html.TextBox("author", (string)Context.Items["CurrentUsername"], new {@type="hidden"})
+										@Html.TextBox("role", "A", new {@type="hidden"})
 										@Html.TextBox("currentPage", (int)ViewBag.CurrentPage, new {@type = "hidden"})
 										@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
 										<input type="hidden" name="IlluImg" id="PhotoArrayData" />
@@ -148,6 +127,7 @@
 										<th class="cell">Description</th>
 										<th class="cell">Total level</th>
 										<th class="cell"></th>
+										<th class="cell"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -222,6 +202,33 @@
 																		</div>
 																
 																	</td>
+																	<td>
+																	<button class="btn btn-primary btn-small text-white" data-bs-toggle="modal" data-bs-target="#DeleteTheme-@theme.themeId">Delete</button>
+																	<div class="modal fade" id="DeleteTheme-@theme.themeId" tabindex="-1" role="dialog" aria-labelledby="DeleteTheme-@theme.themeId" aria-hidden="true">
+																		<div class="modal-dialog" role="document">
+
+																			@using (Html.BeginForm("delete-theme", "Theme", FormMethod.Post, new { }))
+																			{
+																				@Html.TextBox("currentPage", (int)ViewBag.CurrentPage, new {@type = "hidden"})
+																					@Html.TextBox("keySearch", (string)ViewBag.KeySearch, new {@type = "hidden"})
+																				@Html.TextBox("themeId", theme.themeId, new {@type = "hidden"})
+																				<div class="modal-content">
+
+																									<div class="modal-header">
+																										<h5 class="modal-title" id="exampleModalLabel">Delete Theme: @theme.themeName ?</h5>
+																									</div>
+																									
+																									<div class="modal-footer">
+																										<button type="submit" class="btn btn-primary">Delete</button>
+																									</div>
+																				</div>
+																			}
+																		</div>
+																	</div>
+																	</td>
+																	
+																	
+
 																</tr>
 											}
 											

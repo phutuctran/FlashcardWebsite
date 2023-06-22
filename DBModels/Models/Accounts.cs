@@ -18,6 +18,7 @@ namespace DBModels.Models
         public string PassWord { get; set; }
         public DateTime? DateCreate { get; set; }
         public string Role { get; set; }
+        public string State { get; set; }
 
         public virtual UserInfos UserInfos { get; set; }
         public virtual ICollection<Dictionary> Dictionary { get; set; }

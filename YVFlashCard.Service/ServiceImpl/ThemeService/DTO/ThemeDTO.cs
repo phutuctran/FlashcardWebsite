@@ -14,6 +14,7 @@ namespace YVFlashCard.Service.ServiceImpl.ThemeService.DTO
         public string mean { get; set; }
         public byte[] IllustrationImg { get; set; }
         public string author { get; set; }
+        public string role { get; set; }
 
         public ThemeDTO() { }
         public ThemeDTO(Themes theme)
@@ -23,6 +24,7 @@ namespace YVFlashCard.Service.ServiceImpl.ThemeService.DTO
             mean = theme.Mean;
             IllustrationImg = theme.IllustrationImg;
             author = theme.Author;
+            role = theme.Role;
         }
         public ThemeDTO(ThemeDTO theme)
         {
@@ -31,6 +33,7 @@ namespace YVFlashCard.Service.ServiceImpl.ThemeService.DTO
 			mean = theme.mean;
 			IllustrationImg = theme.IllustrationImg;
 			author = theme.author;
+            role = theme.role;
 		}
     }
 }
